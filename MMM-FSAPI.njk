@@ -1,0 +1,36 @@
+<div class="fsapi">
+    {% if loading %}
+
+        <div class="dimmed light small">{{ phrases.loading | safe }}</div>
+
+    {% else %}
+
+        {% if data.power == 0 %}
+            <div class="header">{{ data.friendlyName }}</div>
+        {% else %}
+            <div class="header">{{ data.friendlyName }} - {{ data.display }}</div>
+            {% if data.graphicUri != "" or data.graphicUriStation != "" %}
+                <div class="cover">
+                    {% if data.graphicUri != ""  %}
+                        <img id="albumCover" graphicUri src="{{ data.graphicUri }}" />
+                    {% else %}
+                        <img id="albumCover" graphicUriStation src="{{ data.graphicUriStation }}" />
+                    {% endif %}
+                </div>
+            {% endif %}
+            <div class="info">
+                {% if data.artist != "" %}
+                    <div id="name">{{ data.line1 }}</div>
+                    <div id="artist">{{ data.artist }}</div>
+                    <div id="album">{{ data.album }}</div>
+                {% elif data.type === "FM" %}
+                    <div id="name">{{ data.line1 }}</div>
+                {% else %}
+                    <div id="name">{{ data.line2 }}</div>
+                    <div id="text">{{ data.line1 }}</div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+    {% endif %}
+</div>

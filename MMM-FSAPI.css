@@ -1,0 +1,47 @@
+.MMM-FSAPI {
+    margin-top: 10px;
+}
+
+.MMM-FSAPI .header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    margin-bottom: 5px;
+}
+
+.MMM-FSAPI .cover {
+    text-align: center;
+    margin: 0 auto;
+}
+
+.MMM-FSAPI .info {
+    max-width: 300px;
+}
+
+.MMM-FSAPI #albumCover {
+    max-width: 100%;
+    width: 300px;
+    display: inline-block;
+    height: auto;
+    border-radius: 10px;
+}
+
+.MMM-FSAPI #title {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.MMM-FSAPI #name {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.MMM-FSAPI #artist {
+    font-weight: inherit;
+    font-size: 15px;
+}
+
+.MMM-FSAPI #album, #text {
+    font-size: 15px;
+}
