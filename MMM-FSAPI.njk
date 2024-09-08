@@ -25,6 +25,15 @@
                     <div id="album">{{ data.album }}</div>
                 {% elif data.type === "FM" %}
                     <div id="name">{{ data.line1 }}</div>
+                    {% if config.showPI %}
+                        <div id="pi">{{ data.pi }}</div>
+                    {% endif %}
+                {% elif data.type === "DAB" %}
+                    <div id="name">{{ data.line2 }}</div>
+                    <div id="text">{{ data.line1 }}</div>
+                    {% if config.showPI %}
+                        <div id="pi">{{ data.pi }}</div>
+                    {% endif %}
                 {% else %}
                     <div id="name">{{ data.line2 }}</div>
                     <div id="text">{{ data.line1 }}</div>

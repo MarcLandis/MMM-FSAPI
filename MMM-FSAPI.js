@@ -22,7 +22,12 @@ Module.register("MMM-FSAPI", {
         pin: "1234",
         updateInterval: 10, // Seconds, minimum 2
         alwaysShowAlbumArt: false,
-        isoCountryCode: ""
+        isoCountryCode: "",
+        showPI: false
+    },
+
+    getScripts: function() {
+        return ["moment.js"];
     },
 
     getStyles: function () {
@@ -53,6 +58,7 @@ Module.register("MMM-FSAPI", {
         };
 
         this.radiodns_fqdn_old = "";
+        this.radiodns_lastupdated = moment().subtract(10, "minutes");
 
         var self = this;
 
@@ -95,12 +101,24 @@ Module.register("MMM-FSAPI", {
             this.fsapidata.display = this.fsapimodes[this.fsapidata.mode].display;
 
             if (this.fsapidata.graphicUri === "" && this.config.alwaysShowAlbumArt) {
-                this.fsapidata.graphicUri = this.file("images/cover.svg")
+                this.fsapidata.graphicUri = this.file("./images/cover.svg")
             }
 
             this.updateDom();
 
+            switch(this.fsapidata.type) {
+                case "FM":
+                    this.fsapidata.pi = parseInt(this.fsapidata.fmRdsPi).toString(16) + ".png";
+                  break;
+                case "DAB":
+                    this.fsapidata.pi = parseInt(this.fsapidata.dabServiceId).toString(16) + ".png";
+                  break;
+                default:
+
+            }
+
             if (this.fsapidata.graphicUri === "" && (payload.type === "FM" || payload.type === "DAB")) {
+
                 this.sendSocketNotification("FSAPI_GETRADIODNS_FQDN", this.fsapidata);
             }
         }
@@ -108,8 +126,9 @@ Module.register("MMM-FSAPI", {
             if (payload !== "") {
                 this.fsapidata.radiodns_fqdn = payload;
 
-                if (this.fsapidata.radiodns_fqdn !== this.radiodns_fqdn_old) {
+                if ((this.fsapidata.radiodns_fqdn !== this.radiodns_fqdn_old) || (this.radiodns_lastupdated.isBefore(moment().subtract(5, "minutes")))) {
                     this.radiodns_fqdn_old = this.fsapidata.radiodns_fqdn;
+                    this.radiodns_lastupdated = moment();
                     this.fsapidata.graphicUriStation = "";
 
                     Log.info("MMM-FSAPI RADIODNS_FQDN: " + payload);
@@ -123,6 +142,21 @@ Module.register("MMM-FSAPI", {
             if (payload !== "") {
                 this.fsapidata.graphicUriStation = payload;
                 Log.info("MMM-FSAPI RADIODNS_IMAGE: " + payload);
+                this.updateDom();
+            }
+            else
+            {
+                switch(this.fsapidata.type) {
+                    case "FM":
+                        this.fsapidata.graphicUriStation = this.file("./images/stations/" + parseInt(this.fsapidata.fmRdsPi).toString(16) + ".png");
+                      break;
+                    case "DAB":
+                        this.fsapidata.graphicUriStation = this.file("./images/stations/" + parseInt(this.fsapidata.dabServiceId).toString(16) + ".png");
+                      break;
+                    default:
+                        this.fsapidata.graphicUriStation = "";
+                }
+
                 this.updateDom();
             }
         }

@@ -12,11 +12,12 @@ const {
 } = require("xmldom");
 const xmljs = require("xml-js");
 const jsonata = require("jsonata");
+const Log = require("logger");
 
 module.exports = NodeHelper.create({
 
     start: function () {
-        console.log("Starting node helper for: " + this.name);
+        Log.log("Starting node helper for: " + this.name);
 
         needle.defaults({
             parse_response: false,
@@ -252,7 +253,8 @@ module.exports = NodeHelper.create({
                     dabServiceId: dabServiceId,
                     dabScids: dabScids,
                     dabEnsembleId: dabEnsembleId,
-                    isoCountryCode: payload.isoCountryCode
+                    isoCountryCode: payload.isoCountryCode,
+                    pi: ""
                 };
 
                 // send back
@@ -291,12 +293,16 @@ module.exports = NodeHelper.create({
                 }
             }
 
+            //Log.log(self.name + "- constructFQDN Params: " + JSON.stringify(params));
+
             var fqdn = "";
             try {
                 fqdn = radiodns.constructFQDN(params);
             } catch (error) {
 
             }
+
+            //Log.log(self.name + " - FQDN: " + JSON.stringify(fqdn));
 
             self.sendSocketNotification("FSAPI_RADIODNS_FQDN", fqdn);
         }
@@ -328,6 +334,8 @@ module.exports = NodeHelper.create({
                 }
             }
 
+            Log.log(self.name + " - resolveApplication Params: " + JSON.stringify(params));
+
             try {
                 radiodns.resolveApplication(params, 'radioepg', function (err, result) {
 
@@ -335,35 +343,56 @@ module.exports = NodeHelper.create({
 
                         var image = "";
 
-                        var resp = await needle("get", "http://" + result[0].name + "/radiodns/spi/3.1/SI.xml");
+                        try {
+                          var options = {
+                            compressed: true, // sets 'Accept-Encoding' to 'gzip,deflate'
+                            follow_max: 5, // follow up to five redirects
+                            rejectUnauthorized: false, // disable verify SSL certificate
+                          };
 
-                        if (resp.statusCode == 200) {
+                          var resp = await needle(
+                            "get",
+                            "http://" +
+                              result[0].name +
+                              "/radiodns/spi/3.1/SI.xml",
+                            null,
+                            options
+                          );
 
+                          if (resp.statusCode == 200) {
                             var bearer = "";
 
-                            var fqdnArray = payload.radiodns_fqdn.replace(".radiodns.org", "").split(".");
+                            var fqdnArray = payload.radiodns_fqdn
+                              .replace(".radiodns.org", "")
+                              .split(".");
 
                             for (let i = fqdnArray.length - 1; i > -1; i--) {
-                                if (bearer === "") {
-                                    bearer = fqdnArray[i] + ":";
-                                } else if (i === 0) {
-                                    bearer = bearer + fqdnArray[i];
-                                } else {
-                                    bearer = bearer + fqdnArray[i] + ".";
-                                }
+                              if (bearer === "") {
+                                bearer = fqdnArray[i] + ":";
+                              } else if (i === 0) {
+                                bearer = bearer + fqdnArray[i];
+                              } else {
+                                bearer = bearer + fqdnArray[i] + ".";
+                              }
                             }
 
                             var radiodns_js = xmljs.xml2js(resp.body, {
-                                compact: true
+                              compact: true,
                             });
 
-                            var expression = jsonata('serviceInformation.services.service{$replace(bearer._attributes[id = "' + bearer + '"].id, "' + bearer + '", "url"): mediaDescription.multimedia._attributes[width = "600"].url}');
+                            var expression = jsonata(
+                              'serviceInformation.services.service{$replace(bearer._attributes[id = "' +
+                                bearer +
+                                '"].id, "' +
+                                bearer +
+                                '", "url"): mediaDescription.multimedia._attributes[width = "600"].url}'
+                            );
 
                             var result_url = expression.evaluate(radiodns_js);
 
                             image = result_url.url;
-
-                        }
+                          }
+                        } catch (error) {}
 
                         // send back
                         self.sendSocketNotification("FSAPI_RADIODNS_IMAGE", image);
