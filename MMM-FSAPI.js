@@ -1,18 +1,18 @@
 /*********************************
-  Magic Mirror Module:
+  MagicMirror² Module:
   MMM-FSAPI
   https://github.com/MarcLandis/MMM-FSAPI
   
-  By Dirk Rettschlag
+  By Marc Landis
   MIT Licensed
 *********************************/
 
 Module.register("MMM-FSAPI", {
     /*
       This module uses the Nunjucks templating system introduced in
-      version 2.2.0 of MagicMirror.  If you're seeing nothing on your
+      version 2.2.0 of MagicMirror².  If you're seeing nothing on your
       display where you expect this module to appear, make sure your
-      MagicMirror version is at least 2.2.0.
+      MagicMirror² version is at least 2.2.0.
     */
     requiresVersion: "2.2.0",
 

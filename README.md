@@ -1,6 +1,6 @@
-# Magic Mirror Module MMM-FSAPI
+# MagicMirror² Module MMM-FSAPI
 
-A module for your [MagicMirror](https://github.com/MichMich/MagicMirror) that shows what is playing on your Frontier Silicon powered radio. Examples of such devices are in the following list: <https://github.com/cweiske/frontier-silicon-firmwares>
+A module for your [MagicMirror²](https://github.com/MagicMirrorOrg/MagicMirror) that shows what is playing on your Frontier Silicon powered radio. Examples of such devices are in the following list: <https://github.com/cweiske/frontier-silicon-firmwares>
 
 Based on the source it will show some media information. For Spotify album art, song name, artist and album name are shown. For DAB and FM the image will be retrieved using the [RadioDNS](https://radiodns.org/campaigns/project-logo/walkthrough-finding-radio-station-logos/) service and the song information from the device itself (witch is sometimes garbage for FM).
 
@@ -12,7 +12,8 @@ Based on the source it will show some media information. For Spotify album art, 
 
 ```bash
 cd ~/MagicMirror/modules # navigate to module folder
-git clone https://github.com/MarcLandis/MMM-FSAPI.git # clone this repository
+git clone https://github.com/MarcLandis/MMM-FSAPI # clone this repository
+cd MMM-FSAPI
 npm install # install dependencies
 ```
 
@@ -26,6 +27,16 @@ npm install # install dependencies
         // See 'Configuration options' for more information.
     }
 },
+```
+
+## Update
+
+Execute the following commands to install the module:
+
+```bash
+cd ~/MagicMirror/modules/MMM-FSAPI
+git pull
+npm install
 ```
 
 ## Configuration options

@@ -1,7 +1,7 @@
 {
     "name": "mmm-fsapi",
     "version": "1.0.0",
-    "description": "Magic Mirror module that gets current playing information for devices that implement the FSAPI",
+    "description": "MagicMirror² module that gets current playing information for devices that implement the FSAPI",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/MarcLandis/MMM-FSAPI"
@@ -10,6 +10,12 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
+    "keywords": [
+    "MagicMirror",
+    "smart mirror",
+    "music",
+    "module"
+  ],
     "author": "Marc Landis",
     "license": "MIT",
     "bugs": {
