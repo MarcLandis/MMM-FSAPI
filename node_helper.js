@@ -46,7 +46,7 @@ module.exports = NodeHelper.create({
 
                     var expression = jsonata('fsapiResponse.item{_attributes.key: {"type": field[_attributes.name="id"].c8_array._text, "display": field[_attributes.name="label"].c8_array._text}}');
 
-                    var modes = expression.evaluate(resp_js);
+                    var modes = await expression.evaluate(resp_js);
 
                 } catch (error) {
 
