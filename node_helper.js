@@ -9,7 +9,7 @@ const needle = require("needle");
 const radiodns = require("radiodns");
 const {
     DOMParser
-} = require("xmldom");
+} = require("@xmldom/xmldom");
 const xmljs = require("xml-js");
 const jsonata = require("jsonata");
 const Log = require("logger");
