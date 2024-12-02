@@ -27,6 +27,6 @@
         "@xmldom/xmldom": "^0.9.5",
         "radiodns": "^1.2.0",
         "xml-js": "^1.6.11",
-        "jsonata": "^2.0.5"
+        "jsonata": "^2.0.6"
     }
 }
